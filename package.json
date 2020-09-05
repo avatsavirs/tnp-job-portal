@@ -1,0 +1,24 @@
+{
+	"name": "tnp-portal",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "node src",
+		"dev": "nodemon -q src",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"body-parser": "^1.19.0",
+		"cors": "^2.8.5",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"lodash": "^4.17.20"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.4"
+	}
+}
