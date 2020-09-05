@@ -3,7 +3,9 @@ const express = require('express');
 const { urlencoded, json } = require('body-parser');
 const cors = require('cors');
 const { port } = require('./config');
-
+const dbConnect = require('./util/db');
+const { studentSignup, studentSignin, studentProtect } = require('./util/auth');
+const studentRouter = require('./resources/student/student.router');
 /* Initialise Express */
 const app = express();
 
@@ -12,9 +14,21 @@ app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
 
+/* Auth */
+app.post('/api/signup/student', studentSignup);
+app.post('/api/signin/student', studentSignin);
+
+/* Routes */
+app.use('/api/student', studentProtect, studentRouter);
+
 /* Exports */
 module.exports = async function () {
-  app.listen(port, function () {
-    console.log(`🚀 server on http://localhost:${port}`);
+  app.listen(port, async function () {
+    try {
+      await dbConnect();
+      console.log(`🚀 server on http://localhost:${port}`);
+    } catch (e) {
+      console.error(e);
+    }
   });
 };
