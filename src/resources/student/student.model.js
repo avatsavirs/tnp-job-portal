@@ -1,29 +1,55 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcrypt');
-
+const {
+  isInteger,
+  isNotEmpty,
+  containsNumber,
+  containsSpecialChar,
+  containsUpperCaseAndLowerCase
+} = require('../../util/validation');
 /* Schema */
 const StudentSchema = new mongoose.Schema(
   {
     rollNumber: {
       type: Number,
+      required: [true, `loginId is required`],
       unique: true,
-      min: 1000000, // roll numbers...
-      max: 9999999 // ...must be exactly 7 digits
+      min: [1000000, `invalid roll number`], // roll numbers...
+      max: [9999999, `invalid roll number`], // ...must be exactly 7 digits
+      validate: [isInteger, `invalid roll number`]
     },
     name: {
       type: String,
-      required: true
+      trim: true,
+      required: [true, `name is required`],
+      maxlength: [100, `name too long`],
+      validate: [isNotEmpty, `name cannot be empty`]
     },
     password: {
       type: String,
-      required: true
+      required: [true, `password is required`],
+      minlength: [8, `password should be atleast 8 characters`],
+      validate: [
+        {
+          validator: containsNumber,
+          message: `password must contain at least one number`
+        },
+        {
+          validator: containsSpecialChar,
+          message: `password must contain at least one special character`
+        },
+        {
+          validator: containsUpperCaseAndLowerCase,
+          message: `password must contain at least one uppercase and one lowercase character`
+        }
+      ]
     }
   },
   { timestamps: true }
 );
 
-StudentSchema.plugin(uniqueValidator);
+StudentSchema.plugin(uniqueValidator, { message: '{PATH} must be unique' });
 
 StudentSchema.pre('save', function (next) {
   if (!this.isModified('password')) {

@@ -1,15 +1,11 @@
 const { secrets } = require('../config');
 const Student = require('../resources/student/student.model');
 const jwt = require('jsonwebtoken');
+const { isNotEmpty } = require('./validation');
 
 async function studentSignup(req, res) {
   const { name, loginId, password } = req.body;
-  if (!name || !loginId || !password) {
-    return res.status(401).send({
-      message: 'Error: loginId/password/name missing'
-    });
-  }
-  const rollNumber = getRollNumber(loginId);
+  const rollNumber = getRollNumber(loginId); // students can login with wither their kiit email or their roll numbers
   let newStudent = new Student({ name, rollNumber, password });
   try {
     newStudent = await newStudent.save();
@@ -18,21 +14,23 @@ async function studentSignup(req, res) {
       .status(201)
       .json({ message: 'Signup successful ', data: { token } });
   } catch (e) {
-    console.error(e);
-    return res.status(500).json({ message: 'Signup failed' });
+    const errors = getErrors(e);
+    return res.status(500).json({ message: 'Signup Failed', errors });
   }
 }
 
 async function studentSignin(req, res) {
   const { loginId, password } = req.body;
-  if (!loginId || !password) {
+  if (!loginId || !password || !isNotEmpty(loginId)) {
     return res.status(401).send({
-      message: 'Error: loginId/password missing'
+      message: 'Signin Failed',
+      errors: {
+        message: 'Error: loginId/password missing'
+      }
     });
   }
 
   const rollNumber = getRollNumber(loginId);
-
   try {
     const student = await Student.findOne({ rollNumber });
     if (!student) {
@@ -84,7 +82,7 @@ module.exports = {
 
 // **************************************************************
 function getRollNumber(loginId) {
-  if (typeof loginId == 'number') return loginId;
+  if (typeof loginId == 'number' || loginId === undefined) return loginId;
   return Number(loginId.split('@')[0]);
 }
 
@@ -101,4 +99,17 @@ function verifyToken(token) {
       resolve(payload);
     });
   });
+}
+
+function getErrors(err) {
+  var errorArray = [];
+  if (err.message.includes('student validation failed')) {
+    for (let field in err.errors) {
+      errorArray.push({
+        field: field === 'rollNumber' ? 'loginId' : field,
+        error: err.errors[field].message
+      });
+    }
+  }
+  return errorArray;
 }

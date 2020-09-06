@@ -5,6 +5,7 @@ module.exports = function dbConnect(url = dbUrl, options = {}) {
   return mongoose.connect(url, {
     ...options,
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   });
 };

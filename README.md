@@ -14,6 +14,7 @@ This is also have an admin portal for the TnP department to easily add new job p
 - [x] Create ToDo 📝
 - [x] Create student resource 👨‍🎓
 - [x] Add Student Authentication 🔒
+- [x] Add Student Authentication Validation ✅
 - [ ] Create tnp (admin) resource 🏢
 - [ ] Add tnp(admin) Authentication 🔒
 - [ ] Create job resource 👷
@@ -22,91 +23,90 @@ This is also have an admin portal for the TnP department to easily add new job p
 
 - GET /student/
 
-  - response:
+  - success:
 
-    ```javascript
-      {
+    ```json
+    {
       "message": "current user fetched",
       "data": {
-          "_id": "5f5340f57b355a96424e4209",
-          "name": "Ishan Jaiswal",
-          "rollNumber": 1705500,
-          "createdAt": "2020-09-05T07:40:43.137Z",
-          "updatedAt": "2020-09-05T07:40:43.137Z",
-          "__v": 0
-        }
+        "_id": "5f5340f57b355a96424e4209",
+        "name": "Ishan Jaiswal",
+        "rollNumber": 1705500,
+        "createdAt": "2020-09-05T07:40:43.137Z",
+        "updatedAt": "2020-09-05T07:40:43.137Z",
+        "__v": 0
       }
+    }
     ```
 
   - error:
-    ```javascript
+    ```json
     {
       "message": "Unauthorized Access"
     }
     ```
 
 - POST /signup/student
+
   - request:
-    ```javascript
-      {
-        "name": "Ishan Jaiswal",
-        "loginId": "1705500@kiit.ac.in",
-        "password": "Test@12345"
-      }
+    ```json
+    {
+      "name": "Ishan Jaiswal",
+      "loginId": "1705500@kiit.ac.in",
+      "password": "Test@12345"
+    }
     ```
   - success:
-    ```javascript
-      {
-        "message": "Signup successful ",
-        "data": {
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNTM0ZjdkNDNiZmVjYzJlMTc4NjZmOCIsImlhdCI6MTU5OTI5NTM1NywiZXhwIjoxNjA3OTM1MzU3fQ.AD5SH1PSNUMn60BC6pMvcJdOkCQjAdFhufDFEHBbZVc"
-        }
+    ```json
+    {
+      "message": "Signup successful ",
+      "data": {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNTM0ZjdkNDNiZmVjYzJlMTc4NjZmOCIsImlhdCI6MTU5OTI5NTM1NywiZXhwIjoxNjA3OTM1MzU3fQ.AD5SH1PSNUMn60BC6pMvcJdOkCxxxxxxxxxxxxxxxxx"
       }
+    }
     ```
   - error:
-    ```javascript
-      {
-        "message": "Signup failed",
-      }
+    ```json
+    {
+      "message": "Signup Failed",
+      "errors": [
+        /*array of objects {field, error_message}*/
+      ]
+    }
     ```
-  - error:
-    ```javascript
-      {
-        "message": "Error: loginId/password/name missing",
-      }
-    ```
+
 - POST /signin/student/
   - request:
-    ```javascript
-      {
-        "loginId": "1705500@kiit.ac.in",
-        "password": "Test@12345"
-      }
+    ```json
+    {
+      "loginId": "1705500@kiit.ac.in",
+      "password": "Test@12345"
+    }
     ```
   - success:
-    ```javascript
-      {
-        "message": "Signin Successful ",
-        "data": {
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNTM0ZjdkNDNiZmVjYzJlMTc4NjZmOCIsImlhdCI6MTU5OTI5NTM1NywiZXhwIjoxNjA3OTM1MzU3fQ.AD5SH1PSNUMn60BC6pMvcJdOkCQjAdFhufDFEHBbZVc"
-        }
+    ```json
+    {
+      "message": "Signin Successful ",
+      "data": {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNTM0ZjdkNDNiZmVjYzJlMTc4NjZmOCIsImlhdCI6MTU5OTI5NTM1NywiZXhwIjoxNjA3OTM1MzU3fQ.AD5SH1PSNUMn60BC6pMvcJdOkCQjAdFhufDFEHBbZVc"
       }
+    }
     ```
   - error:
-    ```javascript
-      {
-        "message": `Error: Student with loginId ${loginId} not found`
-      }
+    ```json
+    {
+      "message": "Error: Student with loginId ${loginId} not found"
+    }
     ```
   - error:
-    ```javascript
-      {
-        "message": "Error: loginId/password missing",
-      }
+    ```json
+    {
+      "message": "Error: loginId/password missing"
+    }
     ```
   - error:
-    ```javascript
-      {
-        "message": "Invalid Password",
-      }
+    ```json
+    {
+      "message": "Invalid Password"
+    }
     ```
