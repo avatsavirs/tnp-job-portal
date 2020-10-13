@@ -50,6 +50,7 @@ async function studentSignin(req, res) {
     console.error(e);
   }
 }
+
 async function studentProtect(req, res, next) {
   try {
     const token = req.headers.authorization.split('Bearer ')[1];
