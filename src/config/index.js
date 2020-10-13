@@ -20,7 +20,7 @@ switch (baseConfig.env) {
 		envConfig = require("./dev");
 		break;
 	case "test":
-	case "test":
+	case "testing":
 		envConfig = require("./testing");
 		break;
 	case "prod":

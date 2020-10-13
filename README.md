@@ -15,6 +15,8 @@ This is also have an admin portal for the TnP department to easily add new job p
 - [x] Create student resource 👨‍🎓
 - [x] Add Student Authentication 🔒
 - [x] Add Student Authentication Validation ✅
+- [ ] Finish Student Model
+- [ ] Finish Student Routes
 - [ ] Create tnp (admin) resource 🏢
 - [ ] Add tnp(admin) Authentication 🔒
 - [ ] Create job resource 👷
