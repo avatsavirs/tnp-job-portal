@@ -11,90 +11,129 @@ const {
 } = require('../../util/validation');
 
 /* Schema */
-const EducationSchema = new mongoose.Schema({
-  classX: {
-    type: {
-      schoolName: String,
-      marks: Number,
-      passingYear: Number
-    },
-    required: 'Class'
-  },
-  classXII: {
-    type: {
-      schoolName: String,
-      marks: Number,
-      passingYear: Number
-    },
-    required: true
-  },
-  college: {
-    type: {
-      branch: String,
-      cgpa: Number,
-      passingYear: Number
-    },
-    required: true
-  },
-  certifications: [{
-    name: String,
-    url: String,
-    date: Date
-  }]
-});
-
-const WorkExperienceSchema = new mongoose.Schema({
-  companyName: {
-    type: String,
-    required: [true, 'a company name is required']
-  },
-  startedOn: {
-    type: Date,
-    required: [true, 'a start date is required']
-  },
-  endedOn: Date,
-  workType: {
-    type: String,
-    enum: ['FT', 'PT', 'IN'],
-    required: [true, 'specify the type of employment FullTime(FT), PartTime(PT) or Internship(IN)']
-  }
-});
-
-const AddressSchema = new mongoose.Schema({
-  addrLine1: {
-    type: String,
-    required: [true, "addrLine1 is required"]
-  },
-  addrLine2: {
-    type: String,
-    required: [true, "addrLine2 is required"]
-  },
-  city: {
-    type: String,
-    required: [true, "city is required"]
-  },
-  state: {
-    type: String,
-    required: [true, "state is required"]
-  },
-  country: {
-    type: String,
-    required: [true, "country is required"]
-  },
-  pincode: {
-    type: Number,
-    required: [true, "pincode is required"]
-  }
-});
-
 const ProfileSchema = new mongoose.Schema({
-  address: AddressSchema,
-  educationDetails: EducationSchema,
-  workDetails: WorkExperienceSchema,
+  address: {
+    addrLine1: {
+      type: String,
+      required:  "addrLine1 is required"
+    },
+    addrLine2: {
+      type: String,
+      required:  "addrLine2 is required"
+    },
+    city: {
+      type: String,
+      required:  "city is required"
+    },
+    state: {
+      type: String,
+      required:  "state is required"
+    },
+    country: {
+      type: String,
+      required:  "country is required"
+    },
+    pincode: {
+      type: Number,
+      required:  "pincode is required"
+    }
+  },
+  educationDetails: {
+    classX: {
+      type: {
+        schoolName: {
+          type: String,
+          required: 'classX school name is requires'
+        },
+        marks: {
+          type: Number,
+          required: 'classX marks is requires'
+        },
+        passingYear: {
+          type: Number,
+          required: 'classX passingYear is required'
+        }
+      },
+      required: 'Class X details are required'
+    },
+    classXII: {
+      type: {
+        schoolName: {
+          type: String,
+          required: 'class XII school name is requires'
+        },
+        marks: {
+          type: Number,
+          required: 'class XII marks is requires'
+        },
+        passingYear: {
+          type: Number,
+          required: 'class XII passingYear is required'
+        }
+      },
+      required: 'Class XII details are required'
+    },
+    college: {
+      type: {
+        branch: {
+          type: String,
+          required: 'College branch is required'
+        },
+        cgpa: {
+          type: Number,
+          required: 'cgpa is required'
+        },
+        passingYear: {
+          type: Number,
+          required: 'passing Year is required'
+        }
+      },
+      required: 'college details are required'
+    },
+  },
+  workDetails: [{
+    companyName: {
+      type: String,
+      required:  'a company name is required'
+    },
+    startedOn: {
+      type: Date,
+      required:  'a start date is required'
+    },
+    endedOn: Date,
+    workType: {
+      type: String,
+      enum: ['FT', 'PT', 'IN'],
+      required:  'specify the type of employment FullTime(FT), PartTime(PT) or Internship(IN)'
+    }
+  }],
   projectDetails: [{
-    name: String,
-    description: String,
-    githubUrl: String
+    name: {
+      type: String,
+      required: 'project must have a name'
+    },
+    description: {
+      type: String,
+      required: 'project must have a description'
+    },
+    githubUrl: {
+      type: String,
+      required: 'a githubUrl is required for the project'
+    }
+  }],
+  certifications: [{
+    name: {
+      type: String,
+      required: 'name of the certifiacte is required'
+    },
+    url: {
+      type: String,
+      required: 'a url for certifiacte is required'
+    },
+    date: {
+      type: Date,
+      required: 'a date for the certification is required'
+    }
   }]
 });
 
