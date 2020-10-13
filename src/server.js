@@ -4,8 +4,7 @@ const { urlencoded, json } = require('body-parser');
 const cors = require('cors');
 const { port } = require('./config');
 const dbConnect = require('./util/db');
-const { studentSignup, studentSignin, studentProtect } = require('./util/auth');
-const {tnpSingin,tnpProtect}  = require('./util/tnp/tnp.auth');
+const { studentSignup, studentSignin, studentProtect,tnpSingin,tnpProtect} = require('./util/auth');
 
 const studentRouter = require('./resources/student/student.router');
 const tnpRouter = require('./resources/tnp/tnp.router');
@@ -21,7 +20,7 @@ app.use(urlencoded({ extended: true }));
 /* Auth */
 app.post('/api/signup/student', studentSignup);
 app.post('/api/signin/student', studentSignin);
-app.post('/api/tnp/signin',tnpSingin);
+app.post('/api/signin/tnp',tnpSingin);
 
 /* Routes */
 app.use('/api/student', studentProtect, studentRouter);

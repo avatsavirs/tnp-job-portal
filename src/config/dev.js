@@ -5,4 +5,5 @@ module.exports = {
   },
 //  dbUrl:
 //    'mongodb+srv://kartik:ZxJkihz0t9GsMyNa@api-design.iziau.mongodb.net/tipe-api-design?retryWrites=true',
+
 }
