@@ -15,8 +15,10 @@ This is also have an admin portal for the TnP department to easily add new job p
 - [x] Create student resource 👨‍🎓
 - [x] Add Student Authentication 🔒
 - [x] Add Student Authentication Validation ✅
-- [ ] Finish Student Model
-- [ ] Finish Student Routes
+- [x] Finish Student Model
+- [ ] Finish Student Routes🛣
+- [ ] Finish Student Controllers
+- [ ] Add Student Profile Validation✅
 - [ ] Create tnp (admin) resource 🏢
 - [ ] Add tnp(admin) Authentication 🔒
 - [ ] Create job resource 👷
@@ -110,5 +112,54 @@ This is also have an admin portal for the TnP department to easily add new job p
     ```json
     {
       "message": "Invalid Password"
+    }
+    ```
+- POST /student/profile/
+    - request:
+    ```json
+    {
+      "address": {
+          "addrLine1": "5A-74",
+          "addrLine2": "KIIT University",
+          "city": "Bbsr",
+          "state": "Odisha",
+          "country": "India",
+          "pincode": "123456"
+      },
+      "educationDetails": {
+          "classX": {
+              "schoolName": "Delhi Public School",
+              "marks": 10,
+              "passingYear": 2015
+          },
+          "classXII": {
+              "schoolName": "Delhi Public School",
+              "marks": 90,
+              "passingYear": 2017
+          },
+          "college": {
+              "branch": "CSE",
+              "cgpa": 9,
+              "passingYear": 2021
+          }
+      },
+      "workDetails": [{
+          "companyName": "HRC",
+          "startedOn": "02/01/2020",
+          "endedOn": "03/01/2020",
+          "workType": "IN"
+      }],
+      "projectDetails": [
+          {
+              "name": "Snoo",
+              "githubUrl": "http://www.google.com",
+              "description": "This is a social media app"
+          }, 
+          {
+              "name": "B2B invoice management system",
+              "githubUrl": "http://www.google.com",
+              "description": "This is a b2b invoice management system"
+          }
+      ]
     }
     ```
