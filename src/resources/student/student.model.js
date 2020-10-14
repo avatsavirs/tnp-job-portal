@@ -11,85 +11,86 @@ const {
 } = require('../../util/validation');
 
 /* Schema */
+const addressSchema = new mongoose.Schema({
+  addrLine1: {
+    type: String,
+    required: "addrLine1 is required"
+  },
+  addrLine2: {
+    type: String,
+    required: "addrLine2 is required"
+  },
+  city: {
+    type: String,
+    required: "city is required"
+  },
+  state: {
+    type: String,
+    required: "state is required"
+  },
+  country: {
+    type: String,
+    required: "country is required"
+  },
+  pincode: {
+    type: Number,
+    required: "pincode is required"
+  }
+}, {_id: false});
+
+const SchoolDetailSchema = new mongoose.Schema({
+  schoolName: {
+    type: String,
+    required: 'school name is required'
+  },
+  marks: {
+    type: Number,
+    required: 'marks is required'
+  },
+  passingYear: {
+    type: Number,
+    required: 'passingYear is required'
+  }
+}, {_id: false});
+
+const CollegeDetailSchema = new mongoose.Schema({
+  branch: {
+    type: String,
+    required: 'College branch is required'
+  },
+  cgpa: {
+    type: Number,
+    required: 'cgpa is required'
+  },
+  passingYear: {
+    type: Number,
+    required: 'passing Year is required'
+  }
+}, {_id: false});
+
+const EducationDetailsSchema = new mongoose.Schema({
+  classX: {
+    type: SchoolDetailSchema,
+    required: 'Class X details are required'
+  },
+  classXII: {
+    type: SchoolDetailSchema,
+    required: 'Class XII details are required'
+  },
+  college: {
+    type: CollegeDetailSchema,
+    required: 'College details are required'
+  },
+}, {_id: false});
+
 const ProfileSchema = new mongoose.Schema({
   address: {
-    addrLine1: {
-      type: String,
-      required:  "addrLine1 is required"
-    },
-    addrLine2: {
-      type: String,
-      required:  "addrLine2 is required"
-    },
-    city: {
-      type: String,
-      required:  "city is required"
-    },
-    state: {
-      type: String,
-      required:  "state is required"
-    },
-    country: {
-      type: String,
-      required:  "country is required"
-    },
-    pincode: {
-      type: Number,
-      required:  "pincode is required"
-    }
+    type: addressSchema,
+    required: 'address is required'
   },
   educationDetails: {
-    classX: {
-      type: {
-        schoolName: {
-          type: String,
-          required: 'classX school name is requires'
-        },
-        marks: {
-          type: Number,
-          required: 'classX marks is requires'
-        },
-        passingYear: {
-          type: Number,
-          required: 'classX passingYear is required'
-        }
-      },
-      required: 'Class X details are required'
-    },
-    classXII: {
-      type: {
-        schoolName: {
-          type: String,
-          required: 'class XII school name is requires'
-        },
-        marks: {
-          type: Number,
-          required: 'class XII marks is requires'
-        },
-        passingYear: {
-          type: Number,
-          required: 'class XII passingYear is required'
-        }
-      },
-      required: 'Class XII details are required'
-    },
-    college: {
-      type: {
-        branch: {
-          type: String,
-          required: 'College branch is required'
-        },
-        cgpa: {
-          type: Number,
-          required: 'cgpa is required'
-        },
-        passingYear: {
-          type: Number,
-          required: 'passing Year is required'
-        }
-      },
-      required: 'college details are required'
-    },
+    type: EducationDetailsSchema,
+    required: 'educationDetails are required'
   },
   workDetails: [{
     companyName: {
@@ -135,7 +136,7 @@ const ProfileSchema = new mongoose.Schema({
       required: 'a date for the certification is required'
     }
   }]
-});
+}, {_id: false});
 
 const ApplicationSchema = new mongoose.Schema({
   companyId: mongoose.Schema.Types.ObjectId,
