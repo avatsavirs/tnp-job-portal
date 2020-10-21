@@ -17,6 +17,7 @@ This is also have an admin portal for the TnP department to easily add new job p
 - [x] Add Student Authentication Validation ✅
 - [x] Finish Student Model
 - [ ] Finish Student Routes🛣
+- [ ] Add file upload(Resume)
 - [ ] Finish Student Controllers
 - [ ] Add Student Profile Validation✅
 - [ ] Create tnp (admin) resource 🏢
