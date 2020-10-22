@@ -19,7 +19,7 @@ This is also have an admin portal for the TnP department to easily add new job p
 - [ ] Finish Student Routes🛣
 - [ ] Add file upload(Resume)
 - [ ] Finish Student Controllers
-- [ ] Add Student Profile Validation✅
+- [x] Add Student Profile Validation✅
 - [ ] Create tnp (admin) resource 🏢
 - [ ] Add tnp(admin) Authentication 🔒
 - [ ] Create job resource 👷
@@ -34,12 +34,55 @@ This is also have an admin portal for the TnP department to easily add new job p
     {
       "message": "current user fetched",
       "data": {
-        "_id": "5f5340f57b355a96424e4209",
-        "name": "Ishan Jaiswal",
-        "rollNumber": 1705500,
-        "createdAt": "2020-09-05T07:40:43.137Z",
-        "updatedAt": "2020-09-05T07:40:43.137Z",
-        "__v": 0
+        "_id",
+        "name",
+        "email",
+        "applications",
+        "createdAt",
+        "updatedAt",
+        "__v",
+        "profile": {
+            "workDetails": [{
+              "companyName",
+              "startedOn",
+              "workType"
+            }],
+            "projectDetails": [
+                {
+                    "name",
+                    "description",
+                    "githubUrl"
+                }
+            ],
+            "certifications": [],
+            "address": {
+                "addrLine1",
+                "addrLine2",
+                "city",
+                "state",
+                "country",
+                "pincode"
+            },
+            "educationDetails": {
+                "classX": {
+                    "schoolName",
+                    "marks",
+                    "passingYear",
+                    "marksType"
+                },
+                "classXII": {
+                    "schoolName",
+                    "marks",
+                    "passingYear",
+                    "marksType"
+                },
+                "college": {
+                    "branch",
+                    "cgpa",
+                    "passingYear"
+                }
+            }
+        }
       }
     }
     ```
@@ -56,17 +99,18 @@ This is also have an admin portal for the TnP department to easily add new job p
   - request:
     ```json
     {
-      "name": "Ishan Jaiswal",
-      "loginId": "1705500@kiit.ac.in",
-      "password": "Test@12345"
+      "name": "required, only alphabets and spaces",
+      "loginId": "required, Only kiit email id eg. 1705500@kiit.ac.in",
+      "password": "required, min 8 characters, atleast 1 uppercase, 1 lowercase, 1 number, 1 special characters",
+      "profile": "not required"
     }
     ```
   - success:
     ```json
     {
-      "message": "Signup successful ",
+      "message": "Signup successful",
       "data": {
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNTM0ZjdkNDNiZmVjYzJlMTc4NjZmOCIsImlhdCI6MTU5OTI5NTM1NywiZXhwIjoxNjA3OTM1MzU3fQ.AD5SH1PSNUMn60BC6pMvcJdOkCxxxxxxxxxxxxxxxxx"
+        "token"
       }
     }
     ```
@@ -75,7 +119,10 @@ This is also have an admin portal for the TnP department to easily add new job p
     {
       "message": "Signup Failed",
       "errors": [
-        /*array of objects {field, error_message}*/
+        {
+          "field",
+          "message"
+        }
       ]
     }
     ```
@@ -84,8 +131,8 @@ This is also have an admin portal for the TnP department to easily add new job p
   - request:
     ```json
     {
-      "loginId": "1705500@kiit.ac.in",
-      "password": "Test@12345"
+      "loginId": "required, kiit email id. eg. 1705500@kiit.ac.in",
+      "password": "required"
     }
     ```
   - success:
@@ -93,26 +140,17 @@ This is also have an admin portal for the TnP department to easily add new job p
     {
       "message": "Signin Successful ",
       "data": {
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmNTM0ZjdkNDNiZmVjYzJlMTc4NjZmOCIsImlhdCI6MTU5OTI5NTM1NywiZXhwIjoxNjA3OTM1MzU3fQ.AD5SH1PSNUMn60BC6pMvcJdOkCQjAdFhufDFEHBbZVc"
+        "token"
       }
     }
     ```
   - error:
     ```json
     {
-      "message": "Error: Student with loginId ${loginId} not found"
-    }
-    ```
-  - error:
-    ```json
-    {
-      "message": "Error: loginId/password missing"
-    }
-    ```
-  - error:
-    ```json
-    {
-      "message": "Invalid Password"
+      "message": "Signin failed",
+      "error": [
+        {"field", "message"}
+      ]
     }
     ```
 - POST /student/profile/
@@ -120,47 +158,47 @@ This is also have an admin portal for the TnP department to easily add new job p
     ```json
     {
       "address": {
-          "addrLine1": "5A-74",
-          "addrLine2": "KIIT University",
-          "city": "Bbsr",
-          "state": "Odisha",
-          "country": "India",
-          "pincode": "123456"
-      },
+          "addrLine1": "required",
+          "addrLine2": "required",
+          "city": "required, only spaces and letters",
+          "state":  "required, only spaces and letters",
+          "country": "required, only spaces and letters",
+          "pincode": "required, only 6 digit numbers"
+      }: "required",
       "educationDetails": {
           "classX": {
-              "schoolName": "Delhi Public School",
-              "marks": 10,
-              "passingYear": 2015
+              "schoolName": "required, Only alphabets, spaces and period(.) allowed",
+              "marksType": "required, enum: CGPA/PER",
+              "marks": "required, number, max: 100",
+              "passingYear": "yyyy format"
           },
           "classXII": {
-              "schoolName": "Delhi Public School",
-              "marks": 90,
-              "passingYear": 2017
+              "schoolName": "required, Only alphabets, spaces and period(.) allowed",
+              "marksType": "required, enum: CGPA/PER",
+              "marks": "required, number, max: 100",
+              "passingYear": "yyyy format"
           },
           "college": {
-              "branch": "CSE",
-              "cgpa": 9,
-              "passingYear": 2021
+              "branch": "required, only alphabets and spaces",
+              "cgpa": "required, max value 10",
+              "passingYear": "yyyy format"
           }
       },
       "workDetails": [{
-          "companyName": "HRC",
-          "startedOn": "02/01/2020",
-          "endedOn": "03/01/2020",
-          "workType": "IN"
+          "companyName": "required, alphabets, spaces and period(.) allowed",
+          "startedOn": "required, valid date format",
+          "endedOn": "not required, valid date format",
+          "workType": "required, enum: IN/PT/FT"
       }],
-      "projectDetails": [
-          {
-              "name": "Snoo",
-              "githubUrl": "http://www.google.com",
-              "description": "This is a social media app"
-          }, 
-          {
-              "name": "B2B invoice management system",
-              "githubUrl": "http://www.google.com",
-              "description": "This is a b2b invoice management system"
-          }
-      ]
+      "projectDetails": [{
+          "name": "required, alphabets, spaces, periods(.), and hyphens(-) allowed",
+          "githubUrl": "required, must be a valid url starting with http/https",
+          "description": "required"
+      }],
+      "certifications": [{
+        "name": "required, alphabets and spaces allowed",
+        "url": "required, must be a valid url starting with http/https",
+        "date": "required, valid date format"
+      }]
     }
     ```

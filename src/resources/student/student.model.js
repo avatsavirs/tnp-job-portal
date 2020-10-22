@@ -1,70 +1,100 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcrypt');
-
 const {
-  isInteger,
-  isNotEmpty,
+  isURL,
+  isAlphabetical,
+  isStudentEmail,
   containsNumber,
   containsSpecialChar,
-  containsUpperCaseAndLowerCase
+  containsUpperCaseAndLowerCase,
+  isPincode,
+  isYear
 } = require('../../util/validation');
 
 /* Schema */
 const addressSchema = new mongoose.Schema({
   addrLine1: {
     type: String,
+    trim: true,
     required: "addrLine1 is required"
   },
   addrLine2: {
     type: String,
+    trim: true,
     required: "addrLine2 is required"
   },
   city: {
     type: String,
-    required: "city is required"
+    trim: true,
+    required: "city is required",
+    validate: [isAlphabetical, `invalid city name`]
   },
   state: {
     type: String,
-    required: "state is required"
+    trim: true,
+    required: "state is required",
+    validate: [isAlphabetical, `invalid state name`]
   },
   country: {
     type: String,
-    required: "country is required"
+    trim: true,
+    required: "country is required",
+    validate: [isAlphabetical, `invalid country name`]
   },
   pincode: {
-    type: Number,
-    required: "pincode is required"
+    type: String,
+    required: "pincode is required",
+    validate: [isPincode, `invalid pincode`]
   }
 }, {_id: false});
 
 const SchoolDetailSchema = new mongoose.Schema({
   schoolName: {
     type: String,
-    required: 'school name is required'
+    required: 'school name is required',
+    validate: {
+      validator: (name)=>/^([a-z\.]\s?)*\s*$/i.test(name),
+      message:  `invalid school name`
+    }
+  },
+  marksType: {
+    type: String,
+    enum: ['PER', 'CGPA'],
+    required: true
   },
   marks: {
     type: Number,
-    required: 'marks is required'
+    required: 'marks is required',
+    validate: [function (marks) {
+      if (this.marksType === "CGPA") return marks <= 10;
+      return marks <= 100;
+    }, `marks out of range`]
   },
   passingYear: {
     type: Number,
-    required: 'passingYear is required'
+    required: `passingYear is required`,
+    validate: [isYear, `year should be in yyyy format`]
   }
 }, {_id: false});
 
 const CollegeDetailSchema = new mongoose.Schema({
   branch: {
     type: String,
-    required: 'College branch is required'
+    trim: true,
+    required: 'College branch is required',
+    validate: [isAlphabetical, `invalid branch name`]
   },
   cgpa: {
     type: Number,
-    required: 'cgpa is required'
+    required: 'cgpa is required',
+    min: 0,
+    max: 10
   },
   passingYear: {
     type: Number,
-    required: 'passing Year is required'
+    required: 'passing Year is required',
+    validate: [isYear, `year should be in yyyy format`]
   }
 }, {_id: false});
 
@@ -95,7 +125,12 @@ const ProfileSchema = new mongoose.Schema({
   workDetails: [{
     companyName: {
       type: String,
-      required:  'a company name is required'
+      trim: true,
+      required: 'a company name is required',
+      validate: {
+        validator: (name)=>/^([a-z\.]\s?)*\s*$/i.test(name),
+        message:  `invalid company name`
+      }
     },
     startedOn: {
       type: Date,
@@ -111,25 +146,37 @@ const ProfileSchema = new mongoose.Schema({
   projectDetails: [{
     name: {
       type: String,
-      required: 'project must have a name'
+      trim: true,
+      required: 'project must have a name',
+      validate: {
+        validator: (name)=>/^([a-z\.\-]\s?)*\s*$/i.test(name),
+        message:  `invalid project name`
+      }
     },
     description: {
       type: String,
+      trim: true,
       required: 'project must have a description'
     },
     githubUrl: {
       type: String,
-      required: 'a githubUrl is required for the project'
+      trim: true,
+      required: 'a githubUrl is required for the project',
+      validate: [isURL, `Invalid github url`]
     }
   }],
   certifications: [{
     name: {
       type: String,
-      required: 'name of the certifiacte is required'
+      trim: true,
+      required: 'name of the certifiacte is required',
+      validate: [isAlphabetical, `invalid certifiacte name`]
     },
     url: {
       type: String,
-      required: 'a url for certifiacte is required'
+      trim: true,
+      required: 'a url for certifiacte is required',
+      validate: [isURL, `invalid URL`]
     },
     date: {
       type: Date,
@@ -140,30 +187,40 @@ const ProfileSchema = new mongoose.Schema({
 
 const ApplicationSchema = new mongoose.Schema({
   companyId: mongoose.Schema.Types.ObjectId,
-  companyName: String,
-  companyProfileUrl: String,
+  companyName: {
+    type: String,
+    trim: true,
+    required: true,
+    validate: [isAlphabetical, `invalid company name`]
+  },
+  companyProfileUrl: {
+    type: String,
+    trim: true,
+    required: true,
+    validate: [isURL, `Invalid URL`]
+  },
   status: {
     type: String,
+    trim: true,
     enum: ['ACTIVE', 'INACTIVE'],
     default: 'ACTIVE'
   }
 });
 
 const StudentSchema = new mongoose.Schema({
-  rollNumber: {
-    type: Number,
-    required: [true, `loginId is required`],
+  email: {
+    type: String,
+    required:  `email is required`,
     unique: true,
-    min: [1000000, `invalid roll number`], // roll numbers...
-    max: [9999999, `invalid roll number`], // ...must be exactly 7 digits
-    validate: [isInteger, `invalid roll number`]
+    trim: true,
+    validate: [isStudentEmail, `invaild email`]
   },
   name: {
     type: String,
     trim: true,
-    required: [true, `name is required`],
+    required:  `name is required`,
     maxlength: [100, `name too long`],
-    validate: [isNotEmpty, `name cannot be empty`]
+    validate: [isAlphabetical, `name cannot contain any special characters or numbers`]
   },
   password: {
     type: String,
@@ -198,6 +255,9 @@ StudentSchema.virtual('yearGap').get(function() {
   return (this.educationDetails.college.passingYear - this.educationDetails.classXII.passingYear)-4;
 })
 
+StudentSchema.virtual('rollNumber').get(function () {
+  return this.email.split('@')[0];
+})
 StudentSchema.plugin(uniqueValidator, { message: '{PATH} must be unique' });
 
 StudentSchema.pre('save', function (next) {

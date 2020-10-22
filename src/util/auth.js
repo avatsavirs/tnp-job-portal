@@ -5,9 +5,9 @@ const jwt = require('jsonwebtoken');
 const { isNotEmpty } = require('./validation');
 
 async function studentSignup(req, res) {
-  const { name, loginId, password } = req.body;
-  const rollNumber = getRollNumber(loginId); // students can login with wither their kiit email or their roll numbers
-  let newStudent = new Student({ name, rollNumber, password });
+  const { name, email, password } = req.body;
+  //const rollNumber = getRollNumber(loginId); // students can login with wither their kiit email or their roll numbers
+  let newStudent = new Student({ name, email, password });
   try {
     newStudent = await newStudent.save();
     const token = createToken(newStudent);
